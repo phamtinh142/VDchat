@@ -1,0 +1,12 @@
+# node module
+server/node_modules
+client/node_modules
+
+server/*.lock
+client/*.lock
+
+server/*.log
+client/*.log
+
+server/package-lock.json
+client/package-lock.json
