@@ -21,10 +21,5 @@ module.exports = winston.createLogger({
   transports: [
     // Hiển thị log thông qua console
     new winston.transports.Console(),
-    // Ghi các error vào file log
-    new winston.transports.File({
-      level: 'error',
-      filename: path.join(__dirname, 'errors.log'),
-    }),
   ],
 });
