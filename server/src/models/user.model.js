@@ -42,3 +42,7 @@ userSchema.pre("update", async (next) => {
     return next(error);
   }
 });
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
