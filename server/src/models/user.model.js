@@ -11,9 +11,10 @@ const userSchema = new mongoose.Schema({
   password: String,
   sex: Number,
   birthDay: Date,
+  tokens: Array,
 }, { timestamps: true });
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) return next();
 
@@ -28,7 +29,7 @@ userSchema.pre("save", async (next) => {
   }
 });
 
-userSchema.pre("update", async (next) => {
+userSchema.pre("update", async function (next) {
   try {
     if (!this.isModified("password")) return next();
 
