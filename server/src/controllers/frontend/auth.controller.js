@@ -6,25 +6,39 @@ const { jwtSecret, jwtExpirationMinutes } = require('../../config/vars');
 
 exports.login = async (req, res) => {
   try {
+    // Check validate email and password
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed!');
+      const error = new Error();
+      error.message = 'Validation failed!'
       error.statusCode = 422;
       error.data = errors.array();
       throw error;
     }
-    const user = await User.findOne({ email: req.body.email, password: req.body.password }).lean();
-    console.log(`------- user ------- login`);
-    console.log(user);
-    console.log(`------- user ------- login`);
+    // Find user
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      const error = new Error('Email or password is incorrect!');
+      const error = new Error();
+      error.message = 'User not found!';
       error.statusCode = 404;
       throw error;
     }
-
-    return res.status(400).json({ login: 'login success' });
-
+    // Check password
+    const validate = await user.isValidPassword(req.body.password);
+    if (!validate) {
+      const error = new Error();
+      error.message = 'Wrong password!';
+      error.statusCode = 404;
+      throw error;
+    }
+    const body = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      email: user.email,
+    }
+    const token = jwt.sign({ user: body }, jwtSecret, { expiresIn: jwtExpirationMinutes });
+    return res.status(200).json({ token });
   } catch (error) {
     console.log(`------- error ------- login`);
     console.log(error);
@@ -43,7 +57,7 @@ exports.signup = async (req, res, next) => {
       throw error;
     }
 
-    // save user
+    // Save user
     const user = new User(req.body);
     const saveUser = await user.save();
     console.log(`------- saveUser ------- signup`);
