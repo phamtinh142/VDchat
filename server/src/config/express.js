@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-const cors = require('cors');
 
 const router = require('../routes');
 const { logs } = require('./vars');
@@ -17,7 +16,5 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', router);
-
-app.use(cors());
 
 module.exports = app;
