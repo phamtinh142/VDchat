@@ -14,11 +14,11 @@ const userSchema = new mongoose.Schema({
   tokens: Array,
 }, { timestamps: true });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
   try {
-    if (!this.isModified("password")) return next();
+    if (!this.isModified('password')) return next();
 
-    const rounds = env === "test" ? 1 : 10;
+    const rounds = env === 'test' ? 1 : 10;
 
     const hash = await bcrypt.hash(this.password, rounds);
     this.password = hash;
@@ -29,11 +29,11 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-userSchema.pre("update", async function (next) {
+userSchema.pre('update', async function (next) {
   try {
-    if (!this.isModified("password")) return next();
+    if (!this.isModified('password')) return next();
 
-    const rounds = env === "test" ? 1 : 10;
+    const rounds = env === 'test' ? 1 : 10;
 
     const hash = await bcrypt.hash(this.password, rounds);
     this.password = hash;
@@ -48,13 +48,13 @@ userSchema.methods.comparePassword = function comparePassword(candidatePassword,
   bcrypt.compare(candidatePassword, this.password, (error, isMatch) => {
     callback(error, isMatch);
   });
-}
+};
 
 userSchema.methods.isValidPassword = async function (password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
   return compare;
-}
+};
 
 const User = mongoose.model('User', userSchema);
 

@@ -11,4 +11,5 @@ module.exports = {
   fileDirectory: process.env.FILE_DIRECTORY,
   staticURL: process.env.STATIC_URL,
   logs: process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
-}
+  sessionSecret: process.env.SESSION_SECRET,
+};

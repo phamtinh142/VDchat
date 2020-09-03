@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { mongoUri } = require('../config/vars');
+const { mongoUri } = require('./vars');
 
 exports.connect = () => {
   mongoose.connect(mongoUri, {
@@ -13,4 +13,4 @@ exports.connect = () => {
     .then(() => console.log('mongoDB connected...'))
     .catch((error) => console.log('Error: ', error));
   return mongoose.connection;
-}
+};
