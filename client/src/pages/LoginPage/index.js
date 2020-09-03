@@ -1,51 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Row,
   Col,
   Form,
-  Button,
+  Button, Alert, Spinner,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import './style.scss';
+import InputAuth from '../../components/form/InputAuth';
+import userInputText from '../../customHooks/userInputText';
+import withAuthContainer from '../../hocs/AuthContainer';
 
-const LoginPage = () => (
-  <Container fluid>
-    <Row className="justify-content-center login">
-      <Col xl={3} lg={4} md={6} sm={10}>
-        <Row className="justify-content-center">
-          <img src="/logo-vdchat.png" width={200} alt="Logo" />
-        </Row>
-        <Form>
-          <Form.Group>
-            <Form.Control type="email" placeholder="Enter Email" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Control type="password" placeholder="Enter Password" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Check type="checkbox" id="remember-me" label="Remember me" />
-          </Form.Group>
-          <Form.Group>
-            <Button variant="primary" block>
-              Login
-            </Button>
-          </Form.Group>
-        </Form>
-        <Col className="p-0 justify-content-sm-center">
-          <span className="text-center ml-auto mr-auto">
-            Don't have an account yet?
-          </span>
-          <Link to="/signup" className="text-decoration-none">
-            <Button variant="primary" block>
-              Create account
-            </Button>
+const LoginForm = () => {
+  const [toggleLoading, setToggleLoading] = useState(false);
+  const useEmail = userInputText('');
+  const usePassword = userInputText('');
+
+  const submitLogin = (event) => {
+    event.preventDefault();
+    setToggleLoading(!toggleLoading);
+    console.log({
+      email: useEmail.value,
+      password: usePassword.value,
+    });
+  };
+  return (
+    <Col xl={10} lg={10} md={9} sm={8}>
+      <Alert variant="danger" show={false}>
+        Test alert
+      </Alert>
+      <Form onSubmit={submitLogin}>
+        <InputAuth
+          isShowError={true}
+          type="email"
+          messageError="We'll never share your email with anyone else"
+          placeholder="Email"
+          {...useEmail}
+        />
+        <InputAuth
+          isShowError={true}
+          type="password"
+          messageError="We'll never share your email with anyone else"
+          placeholder="Password"
+          {...usePassword}
+        />
+        <Form.Group className="text-center">
+          <Button variant="primary" type="submit" size="lg" className="mb-2" block>
+            {
+              !toggleLoading
+                ? 'Login'
+                : <Spinner animation="border" variant="light" size="sm" />
+            }
+          </Button>
+          <Link to="/login" className="text-decoration-none">
+            <span>Forgot password?</span>
           </Link>
-        </Col>
-      </Col>
-    </Row>
-  </Container>
-);
+        </Form.Group>
+      </Form>
+      <Row className="justify-content-sm-center border-top pt-3">
+        <Link to="/signup" className="text-decoration-none">
+          <Button variant="success" size="lg">
+            Create account
+          </Button>
+        </Link>
+      </Row>
+    </Col>
+  );
+};
+
+const LoginPage = withAuthContainer(LoginForm);
 
 export default LoginPage;
