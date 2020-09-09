@@ -2,9 +2,11 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
+const httpStatus = require('http-status');
 
 const User = require('../models/user.model');
 const { jwtSecret } = require('./vars');
+const APIError = require('../utils/APIError');
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
@@ -78,6 +80,7 @@ passport.use(new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }, async (token, done) => {
   try {
+    // Check user exists
     const infoUser = await User.findOne({ _id: token.user._id }).lean();
     if (!infoUser) {
       const error = new Error();
@@ -93,3 +96,45 @@ passport.use(new JwtStrategy({
     return done(error);
   }
 }));
+
+const ADMIN = 'admin';
+const USER = 'user';
+
+const handleJWT = (req, res, next, roles) => async (err, user, info) => {
+  const apiError = new APIError({
+    message: err ? err.message : 'Unauthorized',
+    status: httpStatus.UNAUTHORIZED,
+  });
+
+  try {
+    if (err || !user) throw err;
+    await req.login(user, { session: false });
+  } catch (error) {
+    return next(apiError);
+  }
+
+  if (roles === USER) {
+    if (user.role !== USER) {
+      apiError.status = httpStatus.FORBIDDEN;
+      apiError.message = 'Forbidden';
+      return next(apiError);
+    }
+  } else if (!roles.includes(user.role)) {
+    apiError.status = httpStatus.FORBIDDEN;
+    apiError.message = 'Forbidden';
+    return next(apiError);
+  }
+
+  req.user = user;
+
+  return next();
+};
+
+exports.ADMIN = ADMIN;
+exports.USER = USER;
+
+exports.authorize = (roles) => (req, res, next) => passport.authenticate(
+  'jwt',
+  { session: false },
+  handleJWT(req, res, next, roles),
+)(req, res, next);

@@ -2,7 +2,7 @@ const { check } = require('express-validator');
 
 exports.validationSignup = [
   check('userName').custom((value) => {
-    if (value.search(/[\\(\\)\\<\\>\\?\\[\]\\]+/g) >= 0
+    if (value.search(/[\(\)\<\>\?\[\]\\]+/g) >= 0
       || value.length < 1
       || value.length > 32) {
       throw new Error('Nick name must have 1-32 characters and not include: ()[]<>\\/?');
@@ -10,22 +10,11 @@ exports.validationSignup = [
       return value;
     }
   }),
-  check('firstName').custom((value) => {
-    if (value.length < 1) {
-      throw new Error('First name not empty!');
-    } else {
-      return value;
-    }
-  }),
-  check('lastName').custom((value) => {
-    if (value.length < 1) {
-      throw new Error('Last name not empty!');
-    } else {
-      return value;
-    }
-  }),
+  check('email')
+    .isEmail()
+    .withMessage('Email is invalid!'),
   check('password').custom((value) => {
-    if (value.search(/\s\(\)\[\\]\\{\\}\\<\\>\//g) >= 0
+    if (value.search(/\s\(\)\[\]\{\}\<\>\//g) >= 0
       || value.search(/[A-Z]+/g) < 0
       || value.search(/[0-9]+/g) < 0
       || value.search(/[!@#$%^&*?_]+/g) < 0
@@ -43,9 +32,6 @@ exports.validationSignup = [
       return value;
     }
   }),
-  check('email')
-    .isEmail()
-    .withMessage('Email is invalid!'),
 ];
 
 exports.validationLogin = [

@@ -1,55 +1,66 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Container,
   Row,
   Col,
   Form,
   Button, Alert, Spinner,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-
 import './style.scss';
+import { Link } from 'react-router-dom';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import { submitLogin } from '../../redux/actions';
 import InputAuth from '../../components/form/InputAuth';
 import userInputText from '../../customHooks/userInputText';
 import withAuthContainer from '../../hocs/AuthContainer';
 
 const LoginForm = () => {
-  const [toggleLoading, setToggleLoading] = useState(false);
+  const isLoading = useSelector((state) => state.login.isLoading);
+  const isShowError = useSelector((state) => state.login.isShowError);
+  const messageError = useSelector((state) => state.login.messageError);
+  const isErrorEmail = useSelector((state) => state.login.isErrorEmail);
+  const messageErrorEmail = useSelector((state) => state.login.messageErrorEmail);
+  const isErrorPassword = useSelector((state) => state.login.isErrorPassword);
+  const messageErrorPassword = useSelector((state) => state.login.messageErrorPassword);
+  const loginDispatch = useDispatch();
+
   const useEmail = userInputText('');
   const usePassword = userInputText('');
 
-  const submitLogin = (event) => {
+  const onClickLogin = (event) => {
     event.preventDefault();
-    setToggleLoading(!toggleLoading);
-    console.log({
+    loginDispatch(submitLogin({
       email: useEmail.value,
       password: usePassword.value,
-    });
+    }));
   };
   return (
     <Col xl={10} lg={10} md={9} sm={8}>
-      <Alert variant="danger" show={false}>
-        Test alert
+      <Alert variant="danger" show={isShowError}>
+        {messageError}
       </Alert>
-      <Form onSubmit={submitLogin}>
+      <Form onSubmit={onClickLogin}>
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorEmail}
           type="email"
-          messageError="We'll never share your email with anyone else"
+          messageError={messageErrorEmail}
           placeholder="Email"
           {...useEmail}
         />
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorPassword}
           type="password"
-          messageError="We'll never share your email with anyone else"
+          messageError={messageErrorPassword}
           placeholder="Password"
           {...usePassword}
         />
         <Form.Group className="text-center">
           <Button variant="primary" type="submit" size="lg" className="mb-2" block>
             {
-              !toggleLoading
+              !isLoading
                 ? 'Login'
                 : <Spinner animation="border" variant="light" size="sm" />
             }

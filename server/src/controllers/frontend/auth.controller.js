@@ -10,7 +10,7 @@ exports.login = async (req, res, next) => {
   const validateErrors = validationResult(req);
   if (!validateErrors.isEmpty()) {
     const error = new Error();
-    error.statusCode = 400;
+    error.status = 400;
     error.data = validateErrors.array();
     return next(error);
   }
@@ -30,6 +30,7 @@ exports.login = async (req, res, next) => {
         }
 
         const body = {
+          _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           userName: user.userName,
@@ -70,8 +71,6 @@ exports.signup = async (req, res, next) => {
 
       // Save user
       const saveUser = new User({
-        firstName: user.firstName,
-        lastName: user.lastName,
         userName: user.userName,
         email: user.email,
         password: user.password,
@@ -87,6 +86,7 @@ exports.signup = async (req, res, next) => {
         }
 
         const body = {
+          _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           userName: user.userName,

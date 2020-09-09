@@ -3,15 +3,31 @@ const bcrypt = require('bcrypt');
 
 const { env } = require('../config/vars');
 
+const roles = ['user', 'admin'];
+
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, default: '' },
-  lastName: { type: String, default: '' },
-  userName: { type: String },
-  email: { type: String, unique: true },
+  firstName: { 
+    type: String, 
+    default: '', 
+  },
+  lastName: { 
+    type: String, 
+    default: '', 
+  },
+  userName: String,
+  email: { 
+    type: String, 
+    unique: true, 
+  },
   password: String,
   sex: Number,
   birthDay: Date,
   tokens: Array,
+  role: { 
+    type: String, 
+    enum: roles, 
+    default: 'user',
+  },
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

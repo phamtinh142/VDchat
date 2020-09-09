@@ -10,8 +10,8 @@ import './style.scss';
 const withAuthContain = (WrappedComponent) => {
   const AuthContain = () => (
     <Container fluid>
-      <Row>
-        <Col xl={4} lg={6} md={7} className="mb-5">
+      <Row className="h-100">
+        <Col xl={4} lg={6} md={7} className="mb-5 auth-left">
           <Row className="justify-content-center mt-5">
             <img src="/logo-vdchat.png" width={200} alt="Logo" />
           </Row>

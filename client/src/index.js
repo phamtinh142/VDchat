@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.scss';
 import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
 
 import * as serviceWorker from './serviceWorker';
-import store from './redux/store';
 import AppRouter from './router';
+import configureStore, { history } from './redux/store';
+
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
+    <ConnectedRouter history={history}>
       <AppRouter />
-    </React.StrictMode>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root'),
 );

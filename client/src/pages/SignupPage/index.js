@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Row,
@@ -9,69 +9,87 @@ import {
 } from 'react-bootstrap';
 import './style.scss';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { submitSignup, initialSignup } from '../../redux/actions';
 import userInputText from '../../customHooks/userInputText';
 import InputAuth from '../../components/form/InputAuth';
 import withAuthContainer from '../../hocs/AuthContainer';
 
 const SignupForm = () => {
-  const [toggleLoading, setToggleLoading] = useState(false);
+  const isLoading = useSelector((state) => state.signup.isLoading);
+  const isShowError = useSelector((state) => state.signup.isShowError);
+  const errorMessage = useSelector((state) => state.signup.errorMessage);
+  const isErrorUsername = useSelector((state) => state.signup.isErrorUsername);
+  const errorMessageUsername = useSelector((state) => state.signup.errorMessageUsername);
+  const isErrorEmail = useSelector((state) => state.signup.isErrorEmail);
+  const errorMessageEmail = useSelector((state) => state.signup.errorMessageEmail);
+  const isErrorPassword = useSelector((state) => state.signup.isErrorPassword);
+  const errorMessagePassword = useSelector((state) => state.signup.errorMessagePassword);
+  const isErrorConfirmPassword = useSelector((state) => state.signup.isErrorConfirmPassword);
+  const errorMessageConfirmPassword = useSelector((state) => state.signup.errorMessageConfirmPassword);
+  const signupDispatch = useDispatch();
+
   const useEmail = userInputText('');
   const useUsername = userInputText('');
   const usePassword = userInputText('');
   const useConfirmPassword = userInputText('');
 
-  const submitSignup = (event) => {
+  const onClickSignup = (event) => {
     event.preventDefault();
-    setToggleLoading(!toggleLoading);
-    console.log({
-      username: useUsername.value,
+
+    signupDispatch(submitSignup({
+      userName: useUsername.value,
       email: useEmail.value,
       password: usePassword.value,
       confirmPassword: useConfirmPassword.value,
-    });
+    }));
   };
+
+  useEffect(() => () => {
+    signupDispatch(initialSignup());
+  }, []);
 
   return (
     <Col xl={10} lg={10} md={9} sm={8}>
-      <Alert variant="danger" show={false}>
-        Test alert
+      <Alert variant="danger" show={isShowError}>
+        {errorMessage}
       </Alert>
-      <Form onSubmit={submitSignup}>
+      <Form onSubmit={onClickSignup}>
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorUsername}
           type="text"
-          messageError="We'll never share your email with anyone else"
+          messageError={errorMessageUsername}
           placeholder="User Name"
           {...useUsername}
         />
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorEmail}
           type="email"
-          messageError="We'll never share your email with anyone else"
+          messageError={errorMessageEmail}
           placeholder="Email"
           {...useEmail}
         />
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorPassword}
           type="password"
-          messageError="We'll never share your email with anyone else"
+          messageError={errorMessagePassword}
           placeholder="Password"
           {...usePassword}
         />
         <InputAuth
-          isShowError={true}
+          isShowError={isErrorConfirmPassword}
           type="password"
-          messageError="We'll never share your email with anyone else"
+          messageError={errorMessageConfirmPassword}
           placeholder="Confirm Password"
           {...useConfirmPassword}
         />
         <Form.Group>
           <Button variant="primary" type="submit" size="lg" block>
             {
-              !toggleLoading
+              !isLoading
                 ? 'Sign Up'
-                : <Spinner animation="border" variant="light" size="sm" />
+                : <Spinner animation="border" variant="light" size="md" />
             }
           </Button>
         </Form.Group>
