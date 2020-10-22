@@ -3,31 +3,96 @@ const bcrypt = require('bcrypt');
 
 const { env } = require('../config/vars');
 
-const roles = ['user', 'admin'];
-
 const userSchema = new mongoose.Schema({
-  firstName: { 
-    type: String, 
-    default: '', 
-  },
-  lastName: { 
-    type: String, 
-    default: '', 
-  },
   userName: String,
   email: { 
     type: String, 
     unique: true, 
   },
   password: String,
-  sex: Number,
-  birthDay: Date,
   tokens: Array,
+  avatar: {
+    type: String,
+    default: '/public/upload/avatars/avatar-default.jpg',
+  },
+  description: {
+    type: String,
+    default: 'Mô tả ngắn về bản thân bạn.',
+  },
+  sex: {
+    value: {
+      type: Number,
+      enum: [
+        0, // None
+        1, // Male 
+        2, // Female 
+        3, // LGBT
+      ],
+      default: 0,
+    },
+    status: {
+      type: Number,
+      enum: [
+        0, // Public
+        1, // Friend
+        2, // Private
+      ],
+      default: 0,
+    },
+  },
+  birthDay: {
+    status: {
+      status: {
+        type: Number,
+        enum: [
+          0, // Public
+          1, // Friend
+          2, // Private
+        ],
+        default: 0,
+      },
+      value: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  },
+  maritalStatus: {
+    status: {
+      type: Number,
+      enum: [
+        0, // Public
+        1, // Friend
+        2, // Private
+      ],
+      default: 0,
+    },
+    value: {
+      type: Number,
+      enum: [
+        0, // Alone 
+        1, // Dating
+        2, // Married
+      ],
+      default: 0,
+    },
+  },
+  urlUser: {
+    type: String,
+    default: '',
+  },
   role: { 
     type: String, 
-    enum: roles, 
+    enum: [
+      'user',
+      'admin',
+    ], 
     default: 'user',
   },
+  pendingFriends: [{
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'PendingFriends',
+  }],
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

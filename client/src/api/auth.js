@@ -2,6 +2,7 @@ import api from '../networking/axios';
 import {
   URL_LOGIN,
   URL_SIGNUP,
+  URL_PROFILE,
 } from '../networking/urls';
 
 export const fetchLogin = async ({ 
@@ -28,6 +29,15 @@ export const fetchSignup = async ({
       password,
       confirmPassword,
     });
+    return Promise.resolve(response);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const fetchProfile = async () => {
+  try {
+    const response = await api.get(URL_PROFILE);
     return Promise.resolve(response);
   } catch (error) {
     return Promise.reject(error);

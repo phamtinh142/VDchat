@@ -8,10 +8,11 @@ import rootReducer from './reducers';
 
 export const history = createBrowserHistory();
 
-export default function configureStore() {
+let store;
+export const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
 
-  const store = createStore(
+  store = createStore(
     rootReducer(history),
     applyMiddleware(
       sagaMiddleware,
@@ -19,5 +20,9 @@ export default function configureStore() {
     ),
   );
   sagaMiddleware.run(rootSaga);
+  return store;
+};
+
+export default function getStore() {
   return store;
 }

@@ -1,0 +1,31 @@
+.dialog-header__friend {
+  position: absolute;
+  top: 60px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 370px;
+  right: 30px;
+  .friend__header {
+    padding: 8px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    &--title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+    &--count {
+      font-size: 12px;
+      background-color: #e5e5e5;
+      padding: 4px 10px;
+      border-radius: 50%;
+      font-weight: bold;
+    }
+  }
+  .friend__list {
+    height: 485px;
+    overflow: auto;
+  }
+}

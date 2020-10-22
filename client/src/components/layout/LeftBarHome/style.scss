@@ -1,0 +1,35 @@
+.left-bar {
+  position: fixed;
+  top: 70px;
+  width: 352px;
+  height: calc(100% - 56px);
+  overflow: auto;
+  overflow-y: hidden;
+  background-color: #ffffff;
+  .header-bar {
+    .title {
+      font-size: 21px;
+      font-weight: bold;
+      padding: 0px 16px;
+      margin: 16px 0px;
+    }
+  }
+  .side-menu {
+    .item-menu {
+      padding: 10px 16px;
+      &.active {
+        background-color: #eeeeee;
+      }
+      &:hover {
+        background-color: #f7f7f7;
+      }
+      .icon-item {
+        margin-right: 12px;
+      }
+      .title-item {
+        font-size: 14px;
+        color: #000000;
+      }
+    }
+  }
+}

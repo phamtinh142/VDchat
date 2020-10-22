@@ -1,0 +1,103 @@
+.header {
+  min-height: 70px;
+  justify-content: center;
+  border-bottom: 1px solid rgb(223, 213, 213);
+  background-color: #ffffff;
+  position: fixed;
+  top: 0px;
+  z-index: 99;
+  &__wrapper {
+    align-items: center;
+    height: 69px;
+  }
+  &__left {
+    left: 10px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: left;
+    padding: 0px;
+  }
+  &__logo {
+    height: 50px;
+    width: auto;
+  }
+  &__search {
+    margin-left: 10px;
+    height: 40px;
+    border-radius: 20px;
+    max-width: 240px;
+    border: 1px solid #ced4da;
+  }
+  &__icon-input {
+    height: 40px;
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+  }
+  &__input-search {
+    height: 40px;
+    width: 240px;
+    border-radius: 20px;
+    margin-left: 10px;
+    padding: 17px;
+    padding-left: 40px;
+    font-size: 14px;
+    background-image: url("https://img.icons8.com/ios-glyphs/20/000000/search.png");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    box-shadow: none;
+  }
+  &__center {
+    padding: 0px;
+    justify-content: center;
+    align-items: center;
+  }
+  &__nav-center {
+    height: 69px;
+  }
+  &__item-center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 28px;
+    border-bottom: 3px solid #ffffff;
+    &.active {
+      border-bottom: 3px solid #6fbe49;
+    }
+  }
+  &__title {
+    font-size: 13px;
+    color: black;
+    &.active {
+      color: #6fbe49;
+    }
+  }
+  &__right {
+    padding: 0px;
+    position: relative;
+  }
+  &__item-right {
+    padding: 12px;
+    cursor: pointer;
+  }
+  .item-right__profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    .profile__avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+    }
+    .profile__user-name {
+      margin-left: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 2px;
+    }
+  }
+}

@@ -7,7 +7,7 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import * as serviceWorker from './serviceWorker';
 import AppRouter from './router';
-import configureStore, { history } from './redux/store';
+import { history, configureStore } from './redux/store';
 
 const store = configureStore();
 

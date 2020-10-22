@@ -6,16 +6,38 @@ const http = require('http');
 const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
+const i18n = require('i18n');
+const socketIO = require('socket.io');
 
 const router = require('../routes');
 const { logs, sessionSecret } = require('./vars');
 const errors = require('./errors');
+const initSocket = require('../sockets');
 
 const app = express();
 
-app.use('public', express.static(path.join(__dirname, '../../public')));
+app.use('/public', express.static(path.join(__dirname, '../../public')));
 
 const server = http.createServer(app);
+
+// config socketIO
+const io = socketIO(server, {
+  serveClient: false,
+  pingInterval: 10000,
+  pingTimeout: 5000,
+  transports: ['websocket'],
+  path: '/socket.io',
+});
+initSocket(io);
+
+// config i18n
+i18n.configure({
+  locales: ['en', 'vi'],
+  directory: `${__dirname}/locales`,
+  defaultLocale: 'vi',
+  cookie: 'lang',
+});
+app.use(i18n.init);
 
 // config CORS
 app.use(cors());

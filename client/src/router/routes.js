@@ -20,6 +20,24 @@ const homeRoutes = [
     exact: true,
     loader: () => import('../pages/HomePage'),
   },
+  {
+    key: 2,
+    path: '/chat',
+    exact: true,
+    loader: () => import('../pages/ChatPage'),
+  },
+  {
+    key: 2,
+    path: '/suggest-friend',
+    exact: true,
+    loader: () => import('../pages/SuggestFriend'),
+  },
+  {
+    key: 3,
+    path: '/profile',
+    exact: true,
+    loader: () => import('../pages/ProfilePage'),
+  },
 ];
 
 export default {

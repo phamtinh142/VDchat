@@ -1,0 +1,1 @@
+module.exports = (fileName) => fileName.replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();

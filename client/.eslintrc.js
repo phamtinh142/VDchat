@@ -1,7 +1,16 @@
 module.exports = {
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
+  },
   "env": {
     "browser": true,
-    "es2020": true
+    "es2020": true,
+    "es6": true,
   },
   "extends": [
     "plugin:react/recommended",
@@ -9,7 +18,8 @@ module.exports = {
   ],
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "js": true,
     },
     "ecmaVersion": 11,
     "sourceType": "module"
@@ -27,6 +37,9 @@ module.exports = {
     "react/jsx-boolean-value": 0,
     "no-param-reassign": 0,
     "max-len": 0,
-    "import/named": 0
+    "import/named": 0,
+    "no-underscore-dangle": 0,
+    "import/no-cycle": 0,
+    "require-yield": 0
   }
 };

@@ -1,11 +1,12 @@
 import React from 'react';
 
-const HomePage = () => {
-  return (
-    <div>
-      <span>trang chu</span>
-    </div>
-  )
-}
+import './style.scss';
+import LeftBarHome from '../../components/layout/LeftBarHome';
+import RightBarHome from '../../components/layout/RightBarHome';
+import withHomeContainer from '../../hocs/WithHomeContainer';
 
-export default HomePage;
+const HomePage = () => (
+  <div className="container-fruid home-page" />
+);
+
+export default withHomeContainer({ Content: HomePage, SidebarLeft: LeftBarHome, SidebarRight: RightBarHome });

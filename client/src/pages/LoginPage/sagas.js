@@ -3,6 +3,7 @@ import {
   put,
   call,
 } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import { LOGIN } from '../../redux/typeAction';
 import { fetchLogin } from '../../api';
 import { loginFail } from './actions';
@@ -11,9 +12,12 @@ function* submitLogin(action) {
   const userData = action.payload;
   try {
     const loginResult = yield call(fetchLogin, userData);
-    console.log('LOGIN_RESULT: ', loginResult);
+    yield window.localStorage.setItem('token', loginResult.token);
+    yield put(push('/'));
   } catch (error) {
-    console.log('LOGIN_ERROR: ', error);
+    console.log('------- error ------- submitLogin');
+    console.log(error);
+    console.log('------- error ------- submitLogin');
     const errors = {};
     if (error.data.errors && Array.isArray(error.data.errors)) {
       const errorList = error.data.errors;

@@ -7,10 +7,9 @@ const api = axios.create({
 
 export const isAuthenticated = () => {
   if (typeof window !== 'undefined') {
-    const data = window.sessionStorage.getItem('token');
-    if (data) {
-      const token = JSON.parse(data).token.accessToken;
-      if (token) return token;
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      return token;
     }
   }
   return false;

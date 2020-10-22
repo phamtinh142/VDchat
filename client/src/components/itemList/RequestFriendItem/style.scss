@@ -1,0 +1,50 @@
+.request-friend {
+  &__wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    &:hover {
+      background-color: #f5faf2;
+    }
+  }
+  &__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &__avatar {
+    height: 48px;
+    width: 48px;
+    border-radius: 24px;
+    margin-right: 8px;
+  }
+  &__username {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  &__button {
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    &--confirm {
+      background-color: #ecf7e7;
+      color: #6fbe44;
+      margin-right: 5px;
+    }
+    &--remove {
+      background-color: #e5e5e5;
+      color: #4d4d4d;
+    }
+    &--success {
+      background-color: #e5e5e5;
+      color: #4d4d4d;
+    }
+  }
+}
