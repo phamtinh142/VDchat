@@ -28,10 +28,12 @@ module.exports = (io) => {
       }
 
       socket.on('disconnect', () => {
-        if (clients[user._id]) {
-          clients[user._id] = clients[user._id].filter((socketID) => socketID !== socket.id);
-          if (!clients[user._id].length) {
-            delete clients[user._id];
+        if (user) {
+          if (clients[user._id]) {
+            clients[user._id] = clients[user._id].filter((socketID) => socketID !== socket.id);
+            if (!clients[user._id].length) {
+              delete clients[user._id];
+            }
           }
         }
       });

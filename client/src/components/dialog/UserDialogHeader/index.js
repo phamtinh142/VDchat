@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 import './style.scss';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import { URL_BASE } from '../../../networking/urls';
 
-const UserDialogHeader = React.forwardRef(({ isShow, data }, ref) => (
+const UserDialogHeader = React.forwardRef(({ isShow, data, logout }, ref) => (
   <>
     {
         isShow && (
@@ -16,15 +17,24 @@ const UserDialogHeader = React.forwardRef(({ isShow, data }, ref) => (
               <span className="profile__username">
                 {data.userName}
               </span>
-              <Link className="profile__profile-url" to="/profile">Trang cá nhân</Link>
+              <Link 
+                className="profile__profile-url" 
+                to={`/${data._id}/profile`}
+              >
+                Trang cá nhân
+              </Link>
             </div>
             <div className="option">
               <ul className="nav">
                 <li className="nav-item w-100">
-                  <Link className="option__item" to="/">
+                  <button 
+                    type="button" 
+                    className="button-link"
+                    onClick={logout}
+                  >
                     <img src={LogoutIcon} className="option__icon" alt="icon" />
                     <span className="option__title">Đăng xuất</span>
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -41,6 +51,7 @@ UserDialogHeader.propTypes = {
     userName: PropTypes.string,
     avatar: PropTypes.string,
   }),
+  logout: PropTypes.func,
 };
 
 UserDialogHeader.defaultProps = {
@@ -50,6 +61,7 @@ UserDialogHeader.defaultProps = {
     userName: '',
     avatar: '',
   },
+  logout: null,
 };
 
 export default UserDialogHeader;

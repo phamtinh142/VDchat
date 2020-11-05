@@ -85,20 +85,7 @@ exports.signup = async (req, res, next) => {
           return next(error);
         }
 
-        const body = {
-          _id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          userName: user.userName,
-          email: user.email,
-        };
-
-        const token = jwt.sign(
-          { user: body },
-          jwtSecret,
-          { expiresIn: jwtExpirationMinutes },
-        );
-        return res.status(200).json({ token });
+        return res.status(200).json({ message: 'Đăng kí thành công!' });
       });
     } catch (error) {
       console.log('------- error ------- login');

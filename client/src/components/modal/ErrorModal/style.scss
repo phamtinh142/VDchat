@@ -1,0 +1,16 @@
+.modal-content {
+  border-radius: 8px;
+  .modal-header {
+    border-bottom: 0.5px solid #dee2e6;
+    .modal-title {
+      font-size: inherit;
+      font-weight: 600;
+    }
+  }
+  .modal-body {
+  }
+  .modal-footer {
+    border: none;
+    padding-top: 0px;
+  }
+}

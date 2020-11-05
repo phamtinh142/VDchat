@@ -1,0 +1,36 @@
+.suggest-friend-content {
+  margin-bottom: 40px;
+  .header-suggest-friend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0px 10px 0px;
+    border-bottom: 1px solid rgb(223, 213, 213);
+    margin-bottom: 20px;
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0px;
+    }
+    .search-friend {
+      .input-search {
+        height: 40px;
+        width: 100%;
+        border-radius: 20px;
+        border: none;
+        padding: 17px;
+        padding-left: 40px;
+        font-size: 14px;
+        background-image: url("https://img.icons8.com/ios-glyphs/20/000000/search.png");
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        background-color: #fff;
+        box-shadow: none !important;
+      }
+    }
+  }
+  .friend-list {
+    margin: 0px 0px;
+  }
+}

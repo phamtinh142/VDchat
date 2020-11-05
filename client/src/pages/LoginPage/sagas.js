@@ -4,6 +4,7 @@ import {
   call,
 } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
+
 import { LOGIN } from '../../redux/typeAction';
 import { fetchLogin } from '../../api';
 import { loginFail } from './actions';
@@ -12,13 +13,21 @@ function* submitLogin(action) {
   const userData = action.payload;
   try {
     const loginResult = yield call(fetchLogin, userData);
+
+    console.log('------- loginResult ------- submitLogin');
+    console.log(loginResult);
+    console.log('------- loginResult ------- submitLogin');
+
     yield window.localStorage.setItem('token', loginResult.token);
+    
     yield put(push('/'));
   } catch (error) {
     console.log('------- error ------- submitLogin');
     console.log(error);
     console.log('------- error ------- submitLogin');
+
     const errors = {};
+
     if (error.data.errors && Array.isArray(error.data.errors)) {
       const errorList = error.data.errors;
       errorList.forEach((element) => {

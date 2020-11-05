@@ -2,23 +2,34 @@ import {
   takeLatest,
   put,
   call,
+  delay,
 } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 
 import { SIGNUP } from '../../redux/typeAction';
 import { fetchSignup } from '../../api';
-import {
-  signupSuccess,
+import { 
   signupFail,
+  signupSuccess,
 } from '../../redux/actions';
 
 function* submitSignup(action) {
   const userData = action.payload;
   try {
     const signupResult = yield call(fetchSignup, userData);
-    console.log('signupResult: ', signupResult);
+
+    yield put(signupSuccess(signupResult));
+
+    yield delay(2000);
+    
+    yield put(push('/login'));
   } catch (error) {
-    console.log('errorResult: ', error);
+    console.log('------- error ------- submitSignup');
+    console.log(error);
+    console.log('------- error ------- submitSignup');
+
     const errors = {};
+
     if (error.data.errors && Array.isArray(error.data.errors)) {
       const errorList = error.data.errors;
       errorList.forEach((element) => {

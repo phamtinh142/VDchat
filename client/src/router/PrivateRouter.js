@@ -9,19 +9,26 @@ import {
 import { isAuthenticated } from '../networking/axios';
 import { configSocket } from '../networking/socket';
 import { 
-  getInfoUser,
+  getMyProfileRequest,
+  getFriendRequest,
 } from '../redux/actions';
 
 const HomeRouter = ({ component: Component, ...rest }) => {
-  const profile = useSelector((state) => state.privateRouter.infoUser);
-  const privateRouterDispatch = useDispatch();
+  const profile = useSelector((state) => state.myProfile.myProfile);
+  const dispatch = useDispatch();
+
+  async function fetchProfile() {
+    await dispatch(getMyProfileRequest());
+    await dispatch(getFriendRequest());
+  }
+
   useEffect(() => {
     if (isAuthenticated()) {
       configSocket();
     }
 
     if (!profile && isAuthenticated()) {
-      privateRouterDispatch(getInfoUser());
+      fetchProfile();
     }
   }, []);
   return (

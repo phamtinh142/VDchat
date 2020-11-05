@@ -10,32 +10,10 @@ const Friends = require('../../models/friends.model');
 
 exports.getProfile = async (req, res, next) => {
   try {
-    const infoUser = await User.findOne({ _id: req.user._id })
+    const infoUser = await User.findOne({ _id: req.query.userID })
       .select({
         password: 0, tokens: 0, role: 0, pendingFriends: 0, 
       });
-
-    let requestFriends = [];
-    const requestFriendsResult = await PendingFriends
-      .find({
-        recipient: req.user._id,
-      })
-      .select({ recipient: 0, status: 0 })
-      .populate({
-        path: 'requester', 
-        model: 'User',
-        select: {
-          _id: 1,
-          userName: 1,
-          avatar: 1,
-        },
-      });
-
-    if (requestFriendsResult) {
-      requestFriends = requestFriendsResult.map((element) => {
-        return element.requester;
-      });
-    }
 
     if (!infoUser) {
       const error = new Error();
@@ -44,7 +22,7 @@ exports.getProfile = async (req, res, next) => {
       throw error;
     }
     
-    return res.status(201).json({ user: infoUser, requestFriends });
+    return res.status(201).json({ infoUser });
   } catch (error) {
     console.log('---------- error ---------- getProfile');
     console.log(error);
@@ -53,218 +31,85 @@ exports.getProfile = async (req, res, next) => {
   }
 };
 
-exports.putUpdateUsername = async (req, res, next) => {
+exports.putUpdateProfile = async (req, res, next) => storageAvatar(req, res, async (err) => {
   try {
-    if (!req.body.userName || lodash.isEmpty(req.body.userName)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng nhập tên!';
-      throw error;
-    }
-
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { userName: req.body.userName } };
-
-    const updateUser = await User.updateOne(queryData, updateData);
-
-    if (updateUser.nModified !== 1) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng thử lại!';
-      throw error;
-    }
-    return res.status(200).json({ message: 'Cập nhật thành công!' });
-  } catch (error) {
-    console.log('------- error ------- editUserNameController');
-    console.log(error);
-    console.log('------- error ------- editUserNameController');
-    return next(error);
-  }
-};
-
-exports.putUpdateSex = async (req, res, next) => {
-  try {
-    if (!req.body.sex) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng chọn giới tính!';
-      throw error;
-    }
-
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { sex: req.body.sex } };
-
-    const updateUser = await User.updateOne(queryData, updateData);
-
-    if (updateUser.nModified !== 1) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng thử lại!';
-      throw error;
-    }
-    return res.status(200).json({ message: 'Cập nhật thành công!' });
-  } catch (error) {
-    console.log('------- error ------- editUserNameController');
-    console.log(error);
-    console.log('------- error ------- editUserNameController');
-    return next(error);
-  }
-};
-
-exports.putUpdateBirthday = async (req, res, next) => {
-  try {
-    if (!req.body.birthday) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui nhập ngày sinh!';
-      throw error;
-    }
-
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { birthday: req.body.birthday } };
-
-    const updateUser = await User.updateOne(queryData, updateData);
-
-    if (updateUser.nModified !== 1) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng thử lại!';
-      throw error;
-    }
-    return res.status(200).json({ message: 'Cập nhật thành công!' });
-  } catch (error) {
-    console.log('------- error ------- editUserNameController');
-    console.log(error);
-    console.log('------- error ------- editUserNameController');
-    return next(error);
-  }
-};
-
-exports.putUpdateStatus = async (req, res, next) => {
-  try {
-    if (!req.body.status) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng chọn trạng thái bản thân!';
-      throw error;
-    }
-
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { status: req.body.status } };
-
-    const updateUser = await User.updateOne(queryData, updateData);
-
-    if (updateUser.nModified !== 1) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng thử lại!';
-      throw error;
-    }
-    return res.status(200).json({ message: 'Cập nhật thành công!' });
-  } catch (error) {
-    console.log('------- error ------- editUserNameController');
-    console.log(error);
-    console.log('------- error ------- editUserNameController');
-    return next(error);
-  }
-};
-
-exports.putUpdateUrlUser = async (req, res, next) => {
-  try {
-    if (!req.body.urlUser || lodash.isEmpty(req.body.urlUser)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng nhập URL!';
-      throw error;
-    }
-
-    const user = await User.findOne({ urlUser: req.body.urlUser });
-
-    if (user) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'URL đã được sử dụng, vui lòng nhập URl khác!';
-      throw error;
-    }
-
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { urlUser: req.body.urlUser } };
-
-    const updateUser = await User.updateOne(queryData, updateData);
-
-    if (updateUser.nModified !== 1) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Vui lòng thử lại!';
-      throw error;
-    }
-    return res.status(200).json({ message: 'Cập nhật thành công!' });
-  } catch (error) {
-    console.log('------- error ------- editUserNameController');
-    console.log(error);
-    console.log('------- error ------- editUserNameController');
-    return next(error);
-  }
-};
-
-exports.putUpdateAvatar = (req, res, next) => storageAvatar(req, res, async (err) => {
-  try {
-    if (err || !req.file) {
+    if (err) {
       const error = new Error();
       error.status = 400;
       error.message = 'Vui lòng chọn ảnh!';
       throw error;
     }
 
-    const pathImage = `/public/upload/avatars/${req.file.filename}`;
-    const queryData = { _id: req.user._id };
-    const updateData = { $set: { avatar: pathImage } };
-
-    // Remove image old
-    const user = await User.findOne(queryData);
-
-    if (user.avatar && !lodash.isEmpty(user.avatar)) {
-      const pathFile = path.resolve(__dirname, '../../../') + user.avatar.trim();
-      const checkPathExistsSync = await fs.existsSync(pathFile);
-      if (checkPathExistsSync) {
-        await fs.unlinkSync(pathFile);
-      }
+    const objUpdate = {};
+    if (req.file) {
+      const pathImage = `/public/upload/avatars/${req.file.filename}`;
+      objUpdate.avatar = pathImage;
     }
 
-    // Update avatar
-    const updateUser = await User.updateOne(queryData, updateData);
+    if (req.body.description) {
+      objUpdate.description = req.body.description;
+    }
 
-    if (updateUser.nModified !== 1) {
+    if (req.body.userName) {
+      objUpdate.userName = req.body.userName;
+    }
+
+    if (req.body.sex) {
+      objUpdate.sex = {
+        value: req.body.sex.value,
+        status: req.body.sex.status,
+      };
+    }
+
+    if (req.body.birthDay) {
+      objUpdate.birthDay = {
+        value: req.body.birthDay.value,
+        status: req.body.birthDay.status,
+      };
+    }
+
+    if (req.body.maritalStatus) {
+      objUpdate.maritalStatus = {
+        value: req.body.maritalStatus.value,
+        status: req.body.maritalStatus.status,
+      };
+    }
+
+    if (Object.keys(objUpdate).length === 0 && objUpdate.constructor === Object) {
       const error = new Error();
-      error.status = 400;
-      error.message = 'Có lỗi khi tải ảnh lên!';
+      error.message = 'Vui lòng nhập đúng!';
+      error.status = 422;
       throw error;
     }
-    return res.status(200).json({
-      message: 'Cập nhật ảnh đại diện thành công!',
-      data: pathImage,
-    });
-  } catch (error) {
-    console.log('------- error ------- putUpdateAvatar');
-    console.log(error);
-    console.log('------- error ------- putUpdateAvatar');
-    return next();
-  }
-});
 
-exports.getContact = async (req, res, next) => {
-  try {
-    // const contact = await Contact.findOne({ id: req.user._id });
+    const updateUser = await User.updateOne(
+      { _id: req.user._id }, 
+      { $set: objUpdate },
+    );
 
-    // if (!contact) {
-    //   return res.status(200).json({ data: [] });
+    if (updateUser.nModified) {
+      return res.status(200).json({ message: 'Update success', dataUpdate: objUpdate });
+    }
+
+    // Remove image old
+    // const user = await User.findOne({ _id: req.user._id });
+
+    // if (user.avatar && !lodash.isEmpty(user.avatar)) {
+    //   const pathFile = path.resolve(__dirname, '../../../') + user.avatar.trim();
+    //   const checkPathExistsSync = await fs.existsSync(pathFile);
+    //   if (checkPathExistsSync) {
+    //     await fs.unlinkSync(pathFile);
+    //   }
     // }
 
-    // return res.status(200).json({ data: contact });
+    const error = new Error();
+    error.message = 'Vui lòng tải lại trang và thử lại!';
+    error.status = 422;
+    throw error;
   } catch (error) {
     console.log('------- error ------- getContact');
     console.log(error);
     console.log('------- error ------- getContact');
-    return next();
+    return next(error);
   }
-};
+});

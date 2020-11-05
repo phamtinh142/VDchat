@@ -1,11 +1,17 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+import { isAuthenticated } from '../networking/axios';
 
 const AuthRouter = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={(props) => <Component {...props} />}
+    render={(props) => (
+      isAuthenticated()
+        ? (<Redirect to="/" />)
+        : (<Component {...props} />)
+    )}
   />
 );
 

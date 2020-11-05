@@ -15,7 +15,7 @@ import {
 import { submitLogin } from '../../redux/actions';
 import InputAuth from '../../components/form/InputAuth';
 import userInputText from '../../customHooks/userInputText';
-import withAuthContainer from '../../hocs/AuthContainer';
+import { withAuthContainer } from '../../hocs';
 
 const LoginForm = () => {
   const isLoading = useSelector((state) => state.login.isLoading);
@@ -37,6 +37,7 @@ const LoginForm = () => {
       password: usePassword.value,
     }));
   };
+  
   return (
     <Col xl={10} lg={10} md={9} sm={8}>
       <Alert variant="danger" show={isShowError}>

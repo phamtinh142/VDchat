@@ -18,25 +18,25 @@ const homeRoutes = [
     key: 1,
     path: '/',
     exact: true,
-    loader: () => import('../pages/HomePage'),
-  },
-  {
-    key: 2,
-    path: '/chat',
-    exact: true,
     loader: () => import('../pages/ChatPage'),
   },
   {
     key: 2,
-    path: '/suggest-friend',
+    path: '/:id/profile',
     exact: true,
-    loader: () => import('../pages/SuggestFriend'),
+    loader: () => import('../pages/MyProfilePage'),
   },
   {
     key: 3,
-    path: '/profile',
+    path: '/:id/friends',
     exact: true,
-    loader: () => import('../pages/ProfilePage'),
+    loader: () => import('../pages/MyFriendsPage'),
+  },
+  {
+    key: 4,
+    path: '/everybody',
+    exact: true,
+    loader: () => import('../pages/EverybodyPage'),
   },
 ];
 

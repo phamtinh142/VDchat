@@ -7,21 +7,17 @@ import {
   declinedFriendRequest,
 } from '../../../redux/actions';
 import './style.scss';
-import RequestFriendItem from '../../itemList/RequestFriendItem';
+import { FriendRequestItem } from '../../itemList';
 
 const FriendDialogHeader = React.forwardRef(({ isShow, data }, ref) => {
-  const requestFriendDispatch = useDispatch();
+  const dispatch = useDispatch();
   const onClickAcceptFriendRequest = (userID) => {
-    requestFriendDispatch(acceptFriendRequest(userID));
+    dispatch(acceptFriendRequest(userID));
   };
 
   const onClickDeleteFriendRequest = (userID) => {
-    requestFriendDispatch(declinedFriendRequest(userID));
+    dispatch(declinedFriendRequest(userID));
   };
-
-  console.log('------- data ------- FriendDialogHeader');
-  console.log(data);
-  console.log('------- data ------- FriendDialogHeader');
 
   return (
     <>
@@ -35,7 +31,7 @@ const FriendDialogHeader = React.forwardRef(({ isShow, data }, ref) => {
             <div className="friend__list">
               {
                 data.map((element) => (
-                  <RequestFriendItem 
+                  <FriendRequestItem 
                     key={element._id}
                     data={element}
                     acceptFriendRequest={() => onClickAcceptFriendRequest(element._id)}

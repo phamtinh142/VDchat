@@ -14,10 +14,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { submitSignup, initialSignup } from '../../redux/actions';
 import userInputText from '../../customHooks/userInputText';
 import InputAuth from '../../components/form/InputAuth';
-import withAuthContainer from '../../hocs/AuthContainer';
+import { withAuthContainer } from '../../hocs';
 
 const SignupForm = () => {
   const isLoading = useSelector((state) => state.signup.isLoading);
+  const isShowSuccess = useSelector((state) => state.signup.isShowSuccess);
+  const messageSuccess = useSelector((state) => state.signup.messageSuccess);
   const isShowError = useSelector((state) => state.signup.isShowError);
   const errorMessage = useSelector((state) => state.signup.errorMessage);
   const isErrorUsername = useSelector((state) => state.signup.isErrorUsername);
@@ -54,6 +56,9 @@ const SignupForm = () => {
     <Col xl={10} lg={10} md={9} sm={8}>
       <Alert variant="danger" show={isShowError}>
         {errorMessage}
+      </Alert>
+      <Alert variant="success" show={isShowSuccess}>
+        {messageSuccess}
       </Alert>
       <Form onSubmit={onClickSignup}>
         <InputAuth

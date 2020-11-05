@@ -40,6 +40,11 @@ module.exports = {
     "import/named": 0,
     "no-underscore-dangle": 0,
     "import/no-cycle": 0,
-    "require-yield": 0
+    "require-yield": 0,
+    "react/jsx-indent": 0,
+    "no-tabs": 0,
+    "no-mixed-spaces-and-tabs": 0,
+    "import/prefer-default-export": 0,
+    "jsx-a11y/anchor-is-valid": 0
   }
 };

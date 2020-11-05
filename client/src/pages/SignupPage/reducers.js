@@ -3,16 +3,24 @@ import { SIGNUP } from '../../redux/typeAction';
 const INITIAL_STATE = {
   isLoading: false,
   errors: null,
-  errorMessage: '',
+
   isShowError: false,
+  errorMessage: '',
+
   isErrorUsername: false,
   errorMessageUsername: '',
+
   isErrorEmail: false,
   errorMessageEmail: '',
+
   isErrorPassword: false,
   errorMessagePassword: '',
+
   isErrorConfirmPassword: false,
   errorMessageConfirmPassword: '',
+
+  isShowSuccess: false,
+  messageSuccess: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -30,6 +38,8 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
+        isShowSuccess: true,
+        messageSuccess: action.payload.message,
       };
     case SIGNUP.SIGNUP_FAIL:
       return {

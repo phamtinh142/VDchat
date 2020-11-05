@@ -61,6 +61,96 @@ exports.getSuggestFriends = async (req, res, next) => {
   }
 };
 
+exports.getFriends = async (req, res, next) => {
+  try {
+    if (!req.query.userID) {
+      const error = new Error();
+      error.status = 404;
+      error.message = 'User not found!';
+      throw error;
+    }
+
+    const friendsResult = await Friends
+      .findOne({ userID: req.query.userID })
+      .populate({
+        path: 'friends',
+        model: 'User',
+        select: {
+          _id: 1,
+          userName: 1,
+          avatar: 1,
+        },
+      });
+
+    return res.status(200).json({ friends: friendsResult.friends });
+  } catch (error) {
+    console.log('------- error ------- getFriends');
+    console.log(error);
+    console.log('------- error ------- getFriends');
+    return next(error);
+  }
+};
+
+exports.getFriendInvitation = async (req, res, next) => {
+  try {
+    const friendsInvitationResult = await PendingFriends
+      .find({ requester: req.user._id })
+      .select({ requester: 0, status: 0 })
+      .populate({
+        path: 'recipient', 
+        model: 'User',
+        select: {
+          _id: 1,
+          userName: 1,
+          avatar: 1,
+        },
+      })
+      .exec();
+
+    let friendInvitation = [];
+    friendInvitation = friendsInvitationResult.map((element) => {
+      return element.recipient;
+    });
+
+    return res.status(200).json({ friendInvitation });
+  } catch (error) {
+    console.log('------- error ------- getFriendInvitation');
+    console.log(error);
+    console.log('------- error ------- getFriendInvitation');
+    return next(error);
+  }
+};
+
+exports.getFriendRequest = async (req, res, next) => {
+  try {
+    const friendsRequestResult = await PendingFriends
+      .find({ recipient: req.user._id })
+      .select({ recipient: 0, status: 0 })
+      .populate({
+        path: 'requester', 
+        model: 'User',
+        select: {
+          _id: 1,
+          userName: 1,
+          avatar: 1,
+        },
+      });
+
+    let friendRequest = [];
+    if (friendsRequestResult) {
+      friendRequest = friendsRequestResult.map((element) => {
+        return element.requester;
+      });
+    }
+    return res.status(200).json({ friendRequest });
+  } catch (error) {
+    console.log('------- error ------- getFriendRequest');
+    console.log(error);
+    console.log('------- error ------- getFriendRequest');
+    return next(error);
+  }
+};
+
 exports.searchUsers = async (req, res, next) => {
   try {
     const limitUser = 100;
@@ -238,6 +328,18 @@ exports.postAcceptFriendRequest = async (req, res, next) => {
       throw error;
     }
 
+    const findFriendRequest = await PendingFriends.findOne({
+      requester: req.body.userID,
+      recipient: req.user._id,
+    });
+
+    if (!findFriendRequest) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Lời mời không hợp lệ hoặc đã bị xóa';
+      throw error;
+    }
+
     // Remove request friend
     const requestFriend = await PendingFriends.findOneAndRemove({
       requester: req.body.userID,
@@ -386,6 +488,49 @@ exports.postCancelingFriendRequest = async (req, res, next) => {
     console.log('------- error ------- postDeleteFriendRequest');
     console.log(error);
     console.log('------- error ------- postDeleteFriendRequest');
+
+    await session.abortTransaction();
+    session.endSession();
+
+    return next(error);
+  }
+};
+
+exports.removeFriend = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    if (!req.query.userID) {
+      const error = new Error();
+      error.message = 'Vui lòng tải lại trang và thử lại!';
+      error.status = 400;
+      throw error;
+    }
+
+    // Remove friend
+    await Friends.findOneAndUpdate(
+      { userID: req.user._id },
+      { $pull: { friends: req.query.userID } },
+      { session },
+    );
+
+    await Friends.findOneAndUpdate(
+      { userID: req.query.userID },
+      { $pull: { friends: req.user._id } },
+      { session },
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      message: 'Đã hủy kết bạn!',
+      userID: req.query.userID,
+    });
+  } catch (error) {
+    console.log('------- error ------- postRemoveFriend');
+    console.log(error);
+    console.log('------- error ------- postRemoveFriend');
 
     await session.abortTransaction();
     session.endSession();

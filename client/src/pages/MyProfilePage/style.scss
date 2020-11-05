@@ -1,0 +1,68 @@
+.about-layout {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 24px 24px;
+  .profile-title {
+    font-size: 24px;
+    padding-top: 8px;
+    margin-bottom: 16px;
+  }
+  .about-form-title {
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 16px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .title {
+      margin-left: 5px;
+    }
+  }
+
+  .profile-row {
+    margin: 0px;
+    border-bottom: 1px solid #f2f2f2;
+    .row-left {
+      padding: 11px 6px;
+      h6 {
+        font-size: 16px;
+        font-weight: normal;
+        margin-bottom: 0px;
+      }
+    }
+    .row-right {
+      padding: 11px 6px;
+      .info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .value {
+          font-weight: 600;
+        }
+        .edit-value {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          text-decoration: none;
+          color: #6fbe44 !important;
+          background: none;
+          border: none;
+        }
+      }
+      .edit-info {
+        .dropdown-status-button {
+          color: #000;
+          background: none;
+          border: none;
+          box-shadow: none !important;
+        }
+        .save-button {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

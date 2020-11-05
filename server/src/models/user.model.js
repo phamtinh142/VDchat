@@ -42,19 +42,17 @@ const userSchema = new mongoose.Schema({
   },
   birthDay: {
     status: {
-      status: {
-        type: Number,
-        enum: [
-          0, // Public
-          1, // Friend
-          2, // Private
-        ],
-        default: 0,
-      },
-      value: {
-        type: Date,
-        default: Date.now,
-      },
+      type: Number,
+      enum: [
+        0, // Public
+        1, // Friend
+        2, // Private
+      ],
+      default: 0,
+    },
+    value: {
+      type: Date,
+      default: Date.now,
     },
   },
   maritalStatus: {
